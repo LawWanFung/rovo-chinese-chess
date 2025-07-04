@@ -1,6 +1,9 @@
-# Chinese Chess (象棋) - Progressive Web App
+# Chinese Chess (象棋) - Progressive Web App (Build with RovoDev)
+
+## All are built with RovoDev for experiment, including all the documentations
 
 A complete Chinese Chess (Xiangqi) game built with React.js and Tailwind CSS as a Progressive Web App. Features an intelligent AI opponent, authentic board design, and comprehensive rule enforcement.
+
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
