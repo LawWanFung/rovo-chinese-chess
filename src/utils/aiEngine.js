@@ -1,14 +1,14 @@
-import { getPieceColorWithPosition, isValidMove, makeMove } from './gameLogic';
+import { getPieceColorWithPosition, isValidMove, makeMove, PIECES } from './gameLogic';
 
 // Piece values for evaluation
 const PIECE_VALUES = {
-  '帥': 10000, '將': 10000,  // King/General
-  '仕': 200, '士': 200,      // Advisor
-  '相': 200, '象': 200,      // Elephant
-  '馬': 400,                 // Horse
-  '車': 900,                 // Chariot
-  '炮': 450, '砲': 450,      // Cannon
-  '兵': 100, '卒': 100       // Soldier
+  [PIECES.RED_KING]: 10000, [PIECES.BLACK_KING]: 10000,
+  [PIECES.RED_ADVISOR]: 200, [PIECES.BLACK_ADVISOR]: 200,
+  [PIECES.RED_ELEPHANT]: 200, [PIECES.BLACK_ELEPHANT]: 200,
+  [PIECES.RED_HORSE]: 400, [PIECES.BLACK_HORSE]: 400,
+  [PIECES.RED_CHARIOT]: 900, [PIECES.BLACK_CHARIOT]: 900,
+  [PIECES.RED_CANNON]: 450, [PIECES.BLACK_CANNON]: 450,
+  [PIECES.RED_SOLDIER]: 100, [PIECES.BLACK_SOLDIER]: 100
 };
 
 // Position bonus tables for better piece placement

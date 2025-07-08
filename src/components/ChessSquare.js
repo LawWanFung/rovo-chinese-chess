@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPieceColorWithPosition } from '../utils/gameLogic';
+import { getPieceColorWithPosition, getPieceDisplay } from '../utils/gameLogic';
 
 function ChessSquare({ piece, row, col, isSelected, onClick, disabled = false }) {
   const pieceColor = getPieceColorWithPosition(piece, row, col);
@@ -46,7 +46,7 @@ function ChessSquare({ piece, row, col, isSelected, onClick, disabled = false })
             ${isSelected ? 'scale-110' : ''}
             transition-transform
           `}>
-            {piece}
+            {getPieceDisplay(piece)}
           </span>
         </div>
       )}

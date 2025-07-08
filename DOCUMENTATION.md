@@ -1,6 +1,7 @@
 # Chinese Chess (象棋) - Complete Documentation
 
 ## 📋 Table of Contents
+
 1. [Project Overview](#project-overview)
 2. [Features](#features)
 3. [Installation & Setup](#installation--setup)
@@ -17,6 +18,7 @@
 A complete Chinese Chess (Xiangqi) game implementation built as a Progressive Web App using React.js. Features an intelligent AI opponent, authentic board design, and comprehensive rule enforcement.
 
 ### Key Highlights
+
 - **Authentic Xiangqi Experience** - Traditional board layout and rules
 - **AI Opponent** - 3 difficulty levels with minimax algorithm
 - **Progressive Web App** - Installable with offline support
@@ -25,6 +27,7 @@ A complete Chinese Chess (Xiangqi) game implementation built as a Progressive We
 ## ✨ Features
 
 ### 🎮 Core Game Features
+
 - **Complete Rule Implementation** - All traditional Xiangqi rules
 - **Turn-based Gameplay** - Red vs Black alternating turns
 - **Move Validation** - Real-time validation for all piece types
@@ -32,6 +35,7 @@ A complete Chinese Chess (Xiangqi) game implementation built as a Progressive We
 - **Move History** - Complete game record tracking
 
 ### 🤖 AI Features
+
 - **Minimax Algorithm** - Deep game tree search with alpha-beta pruning
 - **3 Difficulty Levels**:
   - Easy: 2-ply search (~100-300ms)
@@ -41,6 +45,7 @@ A complete Chinese Chess (Xiangqi) game implementation built as a Progressive We
 - **Performance Optimized** - Efficient move generation and pruning
 
 ### 🎨 Authentic Design
+
 - **Traditional Board** - 9×10 grid with intersection-based play
 - **Palace Areas** - 3×3 areas with diagonal lines
 - **River Representation** - 楚河/漢界 marking between ranks
@@ -50,10 +55,12 @@ A complete Chinese Chess (Xiangqi) game implementation built as a Progressive We
 ## 🚀 Installation & Setup
 
 ### Prerequisites
+
 - Node.js (version 14 or higher)
 - npm or yarn package manager
 
 ### Quick Start
+
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -69,6 +76,7 @@ npm start
 ```
 
 ### Build for Production
+
 ```bash
 # Create production build
 npm run build
@@ -79,6 +87,7 @@ serve -s build
 ```
 
 ### PWA Installation
+
 1. Open the game in a modern browser
 2. Look for "Install" or "Add to Home Screen" option
 3. Follow browser prompts to install as PWA
@@ -86,6 +95,7 @@ serve -s build
 ## 📚 Game Rules
 
 ### Board Layout
+
 - **9 vertical lines (files)** × **10 horizontal lines (ranks)**
 - **Pieces on intersections** - not in squares
 - **Palace areas** - 3×3 areas at each end with diagonal lines
@@ -94,41 +104,49 @@ serve -s build
 ### Piece Movement
 
 #### General/King (帥/將)
+
 - Moves one point orthogonally
 - Must stay within palace (3×3 area)
 - Cannot face opposing general directly
 
 #### Advisor (仕/士)
+
 - Moves one point diagonally
 - Must stay within palace
 - Only 5 possible positions
 
 #### Elephant (相/象)
+
 - Moves exactly 2 points diagonally
 - Cannot cross the river
 - Can be blocked by intervening pieces
 
 #### Horse (馬)
+
 - Moves in L-shape (one orthogonal + one diagonal)
 - Can be blocked by adjacent pieces
 - No jumping over pieces
 
 #### Chariot (車)
+
 - Moves any distance orthogonally
 - Cannot jump over pieces
 - Most powerful piece
 
 #### Cannon (炮/砲)
+
 - Moves like chariot when not capturing
 - Must jump over exactly one piece to capture
 - Unique jumping capture mechanism
 
 #### Soldier (兵/卒)
+
 - Moves one point forward before crossing river
 - Can move forward or sideways after crossing river
 - Cannot move backward
 
 ### Winning Conditions
+
 - **Checkmate** - King cannot escape check
 - **King Capture** - Direct capture of opposing king
 - **Stalemate** - No legal moves available (rare)
@@ -136,23 +154,51 @@ serve -s build
 ## 🧠 AI Implementation
 
 ### Algorithm Overview
+
 The AI uses a minimax algorithm with alpha-beta pruning for efficient game tree search.
 
 ### Evaluation Function
+
 ```javascript
-// Piece values
+// Piece values using unique piece IDs
 const PIECE_VALUES = {
-  '帥': 10000, '將': 10000,  // King
-  '車': 900,                 // Chariot
-  '炮': 450, '砲': 450,      // Cannon
-  '馬': 400,                 // Horse
-  '仕': 200, '士': 200,      // Advisor
-  '相': 200, '象': 200,      // Elephant
-  '兵': 100, '卒': 100       // Soldier
+  [PIECES.RED_KING]: 10000,
+  [PIECES.BLACK_KING]: 10000,
+  [PIECES.RED_CHARIOT]: 900,
+  [PIECES.BLACK_CHARIOT]: 900,
+  [PIECES.RED_CANNON]: 450,
+  [PIECES.BLACK_CANNON]: 450,
+  [PIECES.RED_HORSE]: 400,
+  [PIECES.BLACK_HORSE]: 400,
+  [PIECES.RED_ADVISOR]: 200,
+  [PIECES.BLACK_ADVISOR]: 200,
+  [PIECES.RED_ELEPHANT]: 200,
+  [PIECES.BLACK_ELEPHANT]: 200,
+  [PIECES.RED_SOLDIER]: 100,
+  [PIECES.BLACK_SOLDIER]: 100,
+};
+
+// Display mapping for UI
+const PIECE_DISPLAY = {
+  red_king: "帥",
+  black_king: "將",
+  red_chariot: "車",
+  black_chariot: "車",
+  red_cannon: "炮",
+  black_cannon: "砲",
+  red_horse: "馬",
+  black_horse: "馬",
+  red_advisor: "仕",
+  black_advisor: "士",
+  red_elephant: "相",
+  black_elephant: "象",
+  red_soldier: "兵",
+  black_soldier: "卒",
 };
 ```
 
 ### Evaluation Factors
+
 1. **Material Value** - Sum of piece values
 2. **Positional Bonuses** - Piece placement rewards
 3. **Mobility** - Number of available moves
@@ -160,6 +206,7 @@ const PIECE_VALUES = {
 5. **Center Control** - Strategic positioning
 
 ### Performance Optimizations
+
 - **Alpha-Beta Pruning** - Reduces search tree by 50-90%
 - **Move Ordering** - Examines promising moves first
 - **Iterative Deepening** - Time management capability
@@ -167,7 +214,44 @@ const PIECE_VALUES = {
 
 ## 🏗️ Architecture
 
+### Piece Identification System
+
+The game uses a robust dual-layer piece identification system:
+
+```javascript
+// Internal representation - Unique piece IDs
+const PIECES = {
+  RED_KING: "red_king",
+  BLACK_KING: "black_king",
+  RED_CHARIOT: "red_chariot",
+  BLACK_CHARIOT: "black_chariot",
+  RED_HORSE: "red_horse",
+  BLACK_HORSE: "black_horse",
+  // ... etc for all pieces
+};
+
+// Display representation - Traditional Chinese characters
+const PIECE_DISPLAY = {
+  red_king: "帥",
+  black_king: "將",
+  red_chariot: "車",
+  black_chariot: "車",
+  red_horse: "馬",
+  black_horse: "馬",
+  // ... etc
+};
+```
+
+**Key Benefits:**
+
+- ✅ **Unique Identity**: Each piece has distinct internal ID
+- ✅ **No Ambiguity**: Eliminates confusion between same-character pieces
+- ✅ **Robust Captures**: Same-piece captures work correctly
+- ✅ **Color Consistency**: Pieces maintain color when moved across board
+- ✅ **Clean Logic**: Simplified game state management
+
 ### Component Structure
+
 ```
 App.js                    # Main application component
 ├── ChessBoard.js         # Game board with SVG grid
@@ -179,21 +263,25 @@ App.js                    # Main application component
 ```
 
 ### State Management
+
 ```javascript
 // Game state structure
 const gameState = {
-  board: Array(10).fill().map(() => Array(9).fill(null)),
-  currentPlayer: 'red',
+  board: Array(10)
+    .fill()
+    .map(() => Array(9).fill(null)),
+  currentPlayer: "red",
   selectedSquare: null,
-  gameStatus: 'playing',
+  gameStatus: "playing",
   moveHistory: [],
-  gameMode: 'human', // or 'ai'
-  aiDifficulty: 'medium',
-  isAiThinking: false
+  gameMode: "human", // or 'ai'
+  aiDifficulty: "medium",
+  isAiThinking: false,
 };
 ```
 
 ### Data Flow
+
 1. **User Input** → ChessBoard → GameContext
 2. **Move Validation** → gameLogic.js
 3. **State Update** → Context Provider
@@ -205,9 +293,11 @@ const gameState = {
 ### Core Functions
 
 #### `isValidMove(board, from, to, player)`
+
 Validates if a move is legal according to Xiangqi rules.
 
 **Parameters:**
+
 - `board`: Current board state (10×9 array)
 - `from`: Starting position [row, col]
 - `to`: Target position [row, col]
@@ -216,22 +306,27 @@ Validates if a move is legal according to Xiangqi rules.
 **Returns:** `boolean`
 
 #### `makeMove(board, from, to)`
+
 Executes a move and returns new board state.
 
 #### `isInCheck(board, playerColor)`
+
 Checks if the specified player's king is in check.
 
 #### `isCheckmate(board, playerColor)`
+
 Determines if the specified player is in checkmate.
 
 ### AI Functions
 
 #### `ChessAI.getBestMove(board, player)`
+
 Calculates the best move for the AI player.
 
 **Returns:** `{ from: [row, col], to: [row, col] }`
 
 #### `ChessAI.evaluateBoard(board)`
+
 Evaluates the current board position.
 
 **Returns:** `number` (positive favors black, negative favors red)
@@ -239,13 +334,16 @@ Evaluates the current board position.
 ## 🧪 Testing
 
 ### Manual Testing
+
 1. **Game Flow Testing**
+
    - Start new game
    - Make valid/invalid moves
    - Test check/checkmate scenarios
    - Verify AI responses
 
 2. **UI Testing**
+
    - Responsive design on different screens
    - PWA installation
    - Offline functionality
@@ -256,6 +354,7 @@ Evaluates the current board position.
    - Move quality assessment
 
 ### Automated Testing
+
 ```bash
 # Run test suite
 npm test
@@ -265,6 +364,7 @@ npm run test:ai
 ```
 
 ### Test Coverage
+
 - ✅ Move validation for all pieces
 - ✅ Check/checkmate detection
 - ✅ AI move generation
@@ -274,6 +374,7 @@ npm run test:ai
 ## 🚀 Deployment
 
 ### Static Hosting (Recommended)
+
 ```bash
 # Build for production
 npm run build
@@ -286,6 +387,7 @@ npm run build
 ```
 
 ### PWA Deployment Checklist
+
 - ✅ HTTPS enabled
 - ✅ Service worker registered
 - ✅ Web app manifest configured
@@ -293,6 +395,7 @@ npm run build
 - ✅ Offline functionality tested
 
 ### Environment Variables
+
 ```bash
 # Optional configuration
 REACT_APP_AI_MAX_DEPTH=4
@@ -302,6 +405,7 @@ REACT_APP_ENABLE_DEBUG=false
 ## 🤝 Contributing
 
 ### Development Setup
+
 1. Fork the repository
 2. Create feature branch: `git checkout -b feature/amazing-feature`
 3. Make changes and test thoroughly
@@ -310,12 +414,14 @@ REACT_APP_ENABLE_DEBUG=false
 6. Open Pull Request
 
 ### Code Style
+
 - Use camelCase for variables and functions
 - Follow React best practices
 - Add comments for complex logic
 - Maintain consistent formatting
 
 ### Areas for Contribution
+
 - **Enhanced AI** - Opening books, endgame tables
 - **Multiplayer** - Online gameplay support
 - **Analysis** - Move analysis and hints
@@ -338,4 +444,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Version:** 1.0.0  
 **Last Updated:** July 4, 2024  
-**Maintainer:** Rovo Dev Team
+**Maintainer:** Fung w/ Rovo Dev

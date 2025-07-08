@@ -1,23 +1,41 @@
 # Major Bug Fixes Applied
 
-## Problem 1: Incorrect Piece Color Detection ✅ FIXED
+## Problem 1: Piece Color and Capture Issues ✅ FIXED (MAJOR REFACTOR)
 
-**Issue**: 4 pieces on the black side (2 horses and 2 chariots) were showing as red pieces because both sides use the same Chinese characters (馬 for horse, 車 for chariot).
+**Issue**: Multiple critical bugs with pieces that share the same Chinese characters (馬 for horse, 車 for chariot):
+1. Pieces changing color when moved to opposite side of board
+2. Captured pieces not being removed from board during same-piece captures
+3. Color confusion in piece identification system
 
-**Root Cause**: The `getPieceColor()` function only checked piece characters, not board positions.
+**Root Cause**: Using Chinese characters as piece identifiers caused ambiguity since both red and black pieces use identical characters for horses (馬) and chariots (車).
 
-**Solution Applied**:
-1. Created new `getPieceColorWithPosition(piece, row, col)` function
-2. Uses position context to determine piece color for shared characters
-3. Red pieces start on rows 7-9, black pieces on rows 0-2
-4. For moved pieces, uses position logic to determine original side
-5. Updated all components to use position-aware color detection
+**Solution Applied - Complete Piece ID System Refactor**:
+1. **Unique Piece IDs**: Replaced character-based system with unique identifiers
+   - `red_chariot`, `black_chariot` instead of both using '車'
+   - `red_horse`, `black_horse` instead of both using '馬'
+   - All pieces now have unique IDs: `red_king`, `black_advisor`, etc.
+
+2. **Separation of Concerns**: 
+   - Internal representation: Unique piece IDs for game logic
+   - Display representation: Traditional Chinese characters for UI
+   - Added `getPieceDisplay()` function to convert IDs to characters
+
+3. **Simplified Color Detection**:
+   - `getPieceColorFromId()` function extracts color from piece ID
+   - No more position-based color tracking needed
+   - Eliminated complex piece color tracker system
+
+4. **Robust Capture Logic**:
+   - Captures now work correctly for all piece combinations
+   - No more color mixing during same-piece captures
+   - Clean piece removal from board
 
 **Files Modified**:
-- `src/utils/gameLogic.js` - Added position-aware color function
-- `src/components/ChessSquare.js` - Updated to use new function
+- `src/utils/gameLogic.js` - Complete refactor with new piece ID system
+- `src/components/ChessSquare.js` - Updated to display Chinese characters from IDs
 - `src/components/ChessBoard.js` - Updated piece selection logic
-- `src/utils/aiEngine.js` - Updated AI evaluation
+- `src/utils/aiEngine.js` - Updated piece values and evaluation
+- `src/context/GameContext.js` - Simplified state management
 
 ## Problem 2: No Check/Checkmate Detection ✅ FIXED
 

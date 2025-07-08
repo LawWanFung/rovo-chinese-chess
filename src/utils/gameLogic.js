@@ -1,59 +1,82 @@
 // Chinese Chess piece types and initial board setup
 export const PIECES = {
   // Red pieces (bottom)
-  RED_KING: '帥',
-  RED_ADVISOR: '仕',
-  RED_ELEPHANT: '相',
-  RED_HORSE: '馬',
-  RED_CHARIOT: '車',
-  RED_CANNON: '炮',
-  RED_SOLDIER: '兵',
+  RED_KING: 'red_king',
+  RED_ADVISOR: 'red_advisor',
+  RED_ELEPHANT: 'red_elephant',
+  RED_HORSE: 'red_horse',
+  RED_CHARIOT: 'red_chariot',
+  RED_CANNON: 'red_cannon',
+  RED_SOLDIER: 'red_soldier',
   
   // Black pieces (top)
-  BLACK_KING: '將',
-  BLACK_ADVISOR: '士',
-  BLACK_ELEPHANT: '象',
-  BLACK_HORSE: '馬',
-  BLACK_CHARIOT: '車',
-  BLACK_CANNON: '砲',
-  BLACK_SOLDIER: '卒'
+  BLACK_KING: 'black_king',
+  BLACK_ADVISOR: 'black_advisor',
+  BLACK_ELEPHANT: 'black_elephant',
+  BLACK_HORSE: 'black_horse',
+  BLACK_CHARIOT: 'black_chariot',
+  BLACK_CANNON: 'black_cannon',
+  BLACK_SOLDIER: 'black_soldier'
 };
+
+// Mapping from piece IDs to display characters
+export const PIECE_DISPLAY = {
+  // Red pieces
+  'red_king': '帥',
+  'red_advisor': '仕',
+  'red_elephant': '相',
+  'red_horse': '馬',
+  'red_chariot': '車',
+  'red_cannon': '炮',
+  'red_soldier': '兵',
+  
+  // Black pieces
+  'black_king': '將',
+  'black_advisor': '士',
+  'black_elephant': '象',
+  'black_horse': '馬',
+  'black_chariot': '車',
+  'black_cannon': '砲',
+  'black_soldier': '卒'
+};
+
+// Helper function to get display character for a piece
+export function getPieceDisplay(pieceId) {
+  return PIECE_DISPLAY[pieceId] || null;
+}
+
+// Helper function to get piece color from ID
+export function getPieceColorFromId(pieceId) {
+  if (!pieceId) return null;
+  return pieceId.startsWith('red_') ? 'red' : 'black';
+}
 
 // Initial board setup (10x9 board)
 export const initialBoard = [
   // Row 0 (Black back rank)
-  ['車', '馬', '象', '士', '將', '士', '象', '馬', '車'],
+  [PIECES.BLACK_CHARIOT, PIECES.BLACK_HORSE, PIECES.BLACK_ELEPHANT, PIECES.BLACK_ADVISOR, PIECES.BLACK_KING, PIECES.BLACK_ADVISOR, PIECES.BLACK_ELEPHANT, PIECES.BLACK_HORSE, PIECES.BLACK_CHARIOT],
   // Row 1
   [null, null, null, null, null, null, null, null, null],
   // Row 2 (Black cannons)
-  [null, '砲', null, null, null, null, null, '砲', null],
+  [null, PIECES.BLACK_CANNON, null, null, null, null, null, PIECES.BLACK_CANNON, null],
   // Row 3 (Black soldiers)
-  ['卒', null, '卒', null, '卒', null, '卒', null, '卒'],
+  [PIECES.BLACK_SOLDIER, null, PIECES.BLACK_SOLDIER, null, PIECES.BLACK_SOLDIER, null, PIECES.BLACK_SOLDIER, null, PIECES.BLACK_SOLDIER],
   // Row 4 (River)
   [null, null, null, null, null, null, null, null, null],
   // Row 5 (River)
   [null, null, null, null, null, null, null, null, null],
   // Row 6 (Red soldiers)
-  ['兵', null, '兵', null, '兵', null, '兵', null, '兵'],
+  [PIECES.RED_SOLDIER, null, PIECES.RED_SOLDIER, null, PIECES.RED_SOLDIER, null, PIECES.RED_SOLDIER, null, PIECES.RED_SOLDIER],
   // Row 7 (Red cannons)
-  [null, '炮', null, null, null, null, null, '炮', null],
+  [null, PIECES.RED_CANNON, null, null, null, null, null, PIECES.RED_CANNON, null],
   // Row 8
   [null, null, null, null, null, null, null, null, null],
   // Row 9 (Red back rank)
-  ['車', '馬', '相', '仕', '帥', '仕', '相', '馬', '車']
+  [PIECES.RED_CHARIOT, PIECES.RED_HORSE, PIECES.RED_ELEPHANT, PIECES.RED_ADVISOR, PIECES.RED_KING, PIECES.RED_ADVISOR, PIECES.RED_ELEPHANT, PIECES.RED_HORSE, PIECES.RED_CHARIOT]
 ];
 
 export function getPieceColor(piece) {
-  if (!piece) return null;
-  const redPieces = ['帥', '仕', '相', '炮', '兵']; // Only unique red pieces
-  const blackPieces = ['將', '士', '象', '砲', '卒']; // Only unique black pieces
-  
-  if (redPieces.includes(piece)) return 'red';
-  if (blackPieces.includes(piece)) return 'black';
-  
-  // For pieces that use same character (馬, 車), we need board position context
-  // This function should be called with position context when needed
-  return null;
+  return getPieceColorFromId(piece);
 }
 
 export function isValidMove(board, from, to, currentPlayer) {
@@ -67,10 +90,10 @@ export function isValidMove(board, from, to, currentPlayer) {
   const targetPiece = board[toRow][toCol];
   
   // Check if piece exists and belongs to current player
-  if (!piece || getPieceColorWithPosition(piece, fromRow, fromCol) !== currentPlayer) return false;
+  if (!piece || getPieceColorFromId(piece) !== currentPlayer) return false;
   
   // Can't capture own pieces
-  if (targetPiece && getPieceColorWithPosition(targetPiece, toRow, toCol) === currentPlayer) return false;
+  if (targetPiece && getPieceColorFromId(targetPiece) === currentPlayer) return false;
   
   // Piece-specific movement validation
   return validatePieceMovement(board, piece, fromRow, fromCol, toRow, toCol);
@@ -81,32 +104,34 @@ function validatePieceMovement(board, piece, fromRow, fromCol, toRow, toCol) {
   const colDiff = Math.abs(toCol - fromCol);
   
   switch (piece) {
-    case '帥': // Red King
-    case '將': // Black King
+    case PIECES.RED_KING:
+    case PIECES.BLACK_KING:
       return validateKingMovement(fromRow, fromCol, toRow, toCol, piece);
     
-    case '仕': // Red Advisor
-    case '士': // Black Advisor
+    case PIECES.RED_ADVISOR:
+    case PIECES.BLACK_ADVISOR:
       return validateAdvisorMovement(fromRow, fromCol, toRow, toCol, piece);
     
-    case '相': // Red Elephant
-    case '象': // Black Elephant
+    case PIECES.RED_ELEPHANT:
+    case PIECES.BLACK_ELEPHANT:
       return validateElephantMovement(board, fromRow, fromCol, toRow, toCol, piece);
     
-    case '馬': // Horse (both colors use same character)
+    case PIECES.RED_HORSE:
+    case PIECES.BLACK_HORSE:
       return validateHorseMovement(board, fromRow, fromCol, toRow, toCol);
     
-    case '車': // Chariot (both colors use same character)
+    case PIECES.RED_CHARIOT:
+    case PIECES.BLACK_CHARIOT:
       return validateChariotMovement(board, fromRow, fromCol, toRow, toCol);
     
-    case '炮': // Red Cannon
-    case '砲': // Black Cannon
+    case PIECES.RED_CANNON:
+    case PIECES.BLACK_CANNON:
       return validateCannonMovement(board, fromRow, fromCol, toRow, toCol);
     
-    case '兵': // Red Soldier
+    case PIECES.RED_SOLDIER:
       return validateSoldierMovement(fromRow, fromCol, toRow, toCol, 'red');
     
-    case '卒': // Black Soldier
+    case PIECES.BLACK_SOLDIER:
       return validateSoldierMovement(fromRow, fromCol, toRow, toCol, 'black');
     
     default:
@@ -121,7 +146,7 @@ function validateKingMovement(fromRow, fromCol, toRow, toCol, piece) {
   // King moves one step orthogonally
   if ((rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)) {
     // Must stay within palace
-    const isRed = piece === '帥';
+    const isRed = piece === PIECES.RED_KING;
     if (isRed) {
       return toRow >= 7 && toRow <= 9 && toCol >= 3 && toCol <= 5;
     } else {
@@ -138,7 +163,7 @@ function validateAdvisorMovement(fromRow, fromCol, toRow, toCol, piece) {
   // Advisor moves one step diagonally
   if (rowDiff === 1 && colDiff === 1) {
     // Must stay within palace
-    const isRed = piece === '仕';
+    const isRed = piece === PIECES.RED_ADVISOR;
     if (isRed) {
       return toRow >= 7 && toRow <= 9 && toCol >= 3 && toCol <= 5;
     } else {
@@ -160,7 +185,7 @@ function validateElephantMovement(board, fromRow, fromCol, toRow, toCol, piece) 
     if (board[blockRow][blockCol] !== null) return false;
     
     // Cannot cross river
-    const isRed = piece === '相';
+    const isRed = piece === PIECES.RED_ELEPHANT;
     if (isRed) {
       return toRow >= 5; // Red side
     } else {
@@ -272,34 +297,21 @@ function validateSoldierMovement(fromRow, fromCol, toRow, toCol, color) {
   }
 }
 
-// Get piece color with board position context
+// Get piece color with board position context (now just uses the ID system)
 export function getPieceColorWithPosition(piece, row, col) {
-  if (!piece) return null;
-  
-  const redPieces = ['帥', '仕', '相', '炮', '兵'];
-  const blackPieces = ['將', '士', '象', '砲', '卒'];
-  
-  if (redPieces.includes(piece)) return 'red';
-  if (blackPieces.includes(piece)) return 'black';
-  
-  // For pieces that use same character (馬, 車), determine by position
-  if (piece === '馬' || piece === '車') {
-    // Red pieces start on rows 7-9, black pieces on rows 0-2
-    if (row >= 7) return 'red';
-    if (row <= 2) return 'black';
-    // For pieces that have moved, we need to track this differently
-    // For now, assume pieces in middle are from their original side
-    return row > 4 ? 'red' : 'black';
-  }
-  
-  return null;
+  return getPieceColorFromId(piece);
+}
+
+// Initialize piece color tracker (no longer needed with ID system)
+export function initializePieceColorTracker() {
+  // No-op - not needed with unique piece IDs
 }
 
 // Check if a king is in check
 export function isInCheck(board, kingColor) {
   // Find the king
   let kingPos = null;
-  const kingPiece = kingColor === 'red' ? '帥' : '將';
+  const kingPiece = kingColor === 'red' ? PIECES.RED_KING : PIECES.BLACK_KING;
   
   for (let row = 0; row < 10; row++) {
     for (let col = 0; col < 9; col++) {
@@ -319,7 +331,7 @@ export function isInCheck(board, kingColor) {
   for (let row = 0; row < 10; row++) {
     for (let col = 0; col < 9; col++) {
       const piece = board[row][col];
-      if (piece && getPieceColorWithPosition(piece, row, col) === opponentColor) {
+      if (piece && getPieceColorFromId(piece) === opponentColor) {
         if (isValidMove(board, [row, col], kingPos, opponentColor)) {
           return true;
         }
@@ -338,7 +350,7 @@ export function isCheckmate(board, playerColor) {
   for (let fromRow = 0; fromRow < 10; fromRow++) {
     for (let fromCol = 0; fromCol < 9; fromCol++) {
       const piece = board[fromRow][fromCol];
-      if (piece && getPieceColorWithPosition(piece, fromRow, fromCol) === playerColor) {
+      if (piece && getPieceColorFromId(piece) === playerColor) {
         // Try all possible destinations
         for (let toRow = 0; toRow < 10; toRow++) {
           for (let toCol = 0; toCol < 9; toCol++) {
@@ -366,8 +378,8 @@ export function isKingCaptured(board) {
   for (let row = 0; row < 10; row++) {
     for (let col = 0; col < 9; col++) {
       const piece = board[row][col];
-      if (piece === '帥') redKing = true;
-      if (piece === '將') blackKing = true;
+      if (piece === PIECES.RED_KING) redKing = true;
+      if (piece === PIECES.BLACK_KING) blackKing = true;
     }
   }
   

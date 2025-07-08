@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { initialBoard, isValidMove, makeMove, isInCheck, isCheckmate, isKingCaptured } from '../utils/gameLogic';
+import { initialBoard, isValidMove, makeMove, isInCheck, isCheckmate, isKingCaptured, initializePieceColorTracker } from '../utils/gameLogic';
 import { ChessAI } from '../utils/aiEngine';
 
 const GameContext = createContext();
@@ -55,6 +55,8 @@ function gameReducer(state, action) {
       return state;
     
     case 'RESET_GAME':
+      // Reinitialize piece color tracker when game resets
+      initializePieceColorTracker();
       return { ...initialState, gameMode: state.gameMode, aiDifficulty: state.aiDifficulty };
     
     case 'SET_GAME_MODE':
@@ -113,6 +115,11 @@ function gameReducer(state, action) {
 export function GameProvider({ children }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
   const aiEngine = new ChessAI(state.aiDifficulty);
+
+  // Initialize piece color tracker on component mount
+  useEffect(() => {
+    initializePieceColorTracker();
+  }, []);
 
   // AI move effect
   useEffect(() => {

@@ -2,6 +2,29 @@
 
 All notable changes to the Chinese Chess (Xiangqi) project will be documented in this file.
 
+## [1.1.0] - 2024-12-19
+
+### 🔧 Major Bug Fixes & System Improvements
+
+#### 🎯 Complete Piece Identification System Refactor
+- **BREAKING CHANGE**: Replaced character-based piece system with unique piece IDs
+- **Fixed Critical Bugs**: Resolved all issues with 馬 (horse) and 車 (chariot) pieces
+  - ✅ Pieces no longer change color when moving to opposite side
+  - ✅ Captured pieces are properly removed from board
+  - ✅ No more color confusion during same-piece captures
+
+#### 🏗️ New Architecture
+- **Unique Piece IDs**: `red_chariot`, `black_horse`, `red_king`, etc.
+- **Separation of Concerns**: Internal logic uses IDs, display shows Chinese characters
+- **Simplified Logic**: Eliminated complex position-based color tracking
+- **Robust Captures**: All piece combinations now capture correctly
+
+#### 📁 Files Refactored
+- `src/utils/gameLogic.js` - Complete piece system overhaul
+- `src/utils/aiEngine.js` - Updated piece values and evaluation
+- `src/components/ChessSquare.js` - Display layer separation
+- `src/context/GameContext.js` - Simplified state management
+
 ## [1.0.0] - 2024-07-04
 
 ### 🎉 Initial Release
@@ -48,8 +71,11 @@ All notable changes to the Chinese Chess (Xiangqi) project will be documented in
 - **Service Worker** - PWA functionality and caching
 
 #### 🐛 Bug Fixes
-- **Fixed Piece Colors** - Resolved issue with shared characters (馬, 車)
-- **Position-aware Color Detection** - Proper piece ownership based on board position
+- **Major Piece ID System Refactor** - Complete solution for piece identification issues
+- **Unique Piece Identifiers** - Each piece now has unique ID (red_chariot, black_horse, etc.)
+- **Separation of Logic and Display** - Internal IDs vs display characters
+- **Fixed Capture Logic** - Proper piece removal during same-piece captures
+- **Eliminated Color Confusion** - No more piece color changes when crossing board
 - **Game Ending Logic** - Fixed check/checkmate detection
 - **King Capture Detection** - Immediate game end when king is captured
 - **Board Layout** - Proper intersection-based positioning
