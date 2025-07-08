@@ -5,7 +5,7 @@
 A complete Chinese Chess (Xiangqi) game built with React.js and Tailwind CSS as a Progressive Web App. Features an intelligent AI opponent, authentic board design, and comprehensive rule enforcement.
 
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![React](https://img.shields.io/badge/react-18.2.0-blue.svg)
 ![PWA](https://img.shields.io/badge/PWA-enabled-purple.svg)
