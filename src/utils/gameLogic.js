@@ -96,7 +96,17 @@ export function isValidMove(board, from, to, currentPlayer) {
   if (targetPiece && getPieceColorFromId(targetPiece) === currentPlayer) return false;
   
   // Piece-specific movement validation
-  return validatePieceMovement(board, piece, fromRow, fromCol, toRow, toCol);
+  if (!validatePieceMovement(board, piece, fromRow, fromCol, toRow, toCol)) {
+    return false;
+  }
+  
+  // Check if this move would expose king to Flying General rule
+  const newBoard = makeMove(board, from, to);
+  if (wouldExposeToFlyingGeneral(newBoard, currentPlayer)) {
+    return false;
+  }
+  
+  return true;
 }
 
 function validatePieceMovement(board, piece, fromRow, fromCol, toRow, toCol) {
@@ -106,7 +116,7 @@ function validatePieceMovement(board, piece, fromRow, fromCol, toRow, toCol) {
   switch (piece) {
     case PIECES.RED_KING:
     case PIECES.BLACK_KING:
-      return validateKingMovement(fromRow, fromCol, toRow, toCol, piece);
+      return validateKingMovement(board, fromRow, fromCol, toRow, toCol, piece);
     
     case PIECES.RED_ADVISOR:
     case PIECES.BLACK_ADVISOR:
@@ -139,11 +149,23 @@ function validatePieceMovement(board, piece, fromRow, fromCol, toRow, toCol) {
   }
 }
 
-function validateKingMovement(fromRow, fromCol, toRow, toCol, piece) {
+function validateKingMovement(board, fromRow, fromCol, toRow, toCol, piece) {
   const rowDiff = Math.abs(toRow - fromRow);
   const colDiff = Math.abs(toCol - fromCol);
   
-  // King moves one step orthogonally
+  // Check for Flying General rule (kings facing each other on same file)
+  if (fromCol === toCol && colDiff === 0) {
+    const targetPiece = board[toRow][toCol];
+    const isRed = piece === PIECES.RED_KING;
+    const opponentKing = isRed ? PIECES.BLACK_KING : PIECES.RED_KING;
+    
+    // If target is the opponent king, check if path is clear (Flying General)
+    if (targetPiece === opponentKing) {
+      return isPathClearVertical(board, fromRow, fromCol, toRow, toCol);
+    }
+  }
+  
+  // Normal king movement - one step orthogonally
   if ((rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)) {
     // Must stay within palace
     const isRed = piece === PIECES.RED_KING;
@@ -219,6 +241,55 @@ function validateHorseMovement(board, fromRow, fromCol, toRow, toCol) {
   }
   
   return board[blockRow][blockCol] === null;
+}
+
+// Helper function to check if vertical path is clear between two points
+function isPathClearVertical(board, fromRow, fromCol, toRow, toCol) {
+  if (fromCol !== toCol) return false; // Must be same column
+  
+  const startRow = Math.min(fromRow, toRow);
+  const endRow = Math.max(fromRow, toRow);
+  
+  // Check all squares between start and end (exclusive)
+  for (let row = startRow + 1; row < endRow; row++) {
+    if (board[row][fromCol] !== null) {
+      return false; // Path is blocked
+    }
+  }
+  
+  return true; // Path is clear
+}
+
+// Check if a move would expose the king to Flying General rule
+function wouldExposeToFlyingGeneral(board, playerColor) {
+  // Find both kings
+  let redKingPos = null;
+  let blackKingPos = null;
+  
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 9; col++) {
+      const piece = board[row][col];
+      if (piece === PIECES.RED_KING) {
+        redKingPos = [row, col];
+      } else if (piece === PIECES.BLACK_KING) {
+        blackKingPos = [row, col];
+      }
+    }
+  }
+  
+  // If either king is missing, no Flying General issue
+  if (!redKingPos || !blackKingPos) return false;
+  
+  const [redRow, redCol] = redKingPos;
+  const [blackRow, blackCol] = blackKingPos;
+  
+  // Check if kings are on the same column (file)
+  if (redCol === blackCol) {
+    // Check if path between kings is clear
+    return isPathClearVertical(board, redRow, redCol, blackRow, blackCol);
+  }
+  
+  return false; // Kings not on same file, no Flying General issue
 }
 
 function validateChariotMovement(board, fromRow, fromCol, toRow, toCol) {
@@ -309,6 +380,11 @@ export function initializePieceColorTracker() {
 
 // Check if a king is in check
 export function isInCheck(board, kingColor) {
+  // First check for Flying General rule
+  if (wouldExposeToFlyingGeneral(board, kingColor)) {
+    return true;
+  }
+  
   // Find the king
   let kingPos = null;
   const kingPiece = kingColor === 'red' ? PIECES.RED_KING : PIECES.BLACK_KING;
@@ -332,7 +408,8 @@ export function isInCheck(board, kingColor) {
     for (let col = 0; col < 9; col++) {
       const piece = board[row][col];
       if (piece && getPieceColorFromId(piece) === opponentColor) {
-        if (isValidMove(board, [row, col], kingPos, opponentColor)) {
+        // Use basic piece movement validation to avoid infinite recursion
+        if (validatePieceMovement(board, piece, row, col, kingPos[0], kingPos[1])) {
           return true;
         }
       }

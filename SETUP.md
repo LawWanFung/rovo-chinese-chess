@@ -84,6 +84,7 @@ rovo-chinese-chess/
 - Chariot straight-line movement
 - Cannon jumping capture mechanism
 - Soldier forward/sideways movement rules
+- **Flying General (飛將) rule** - Kings can capture each other directly when facing
 
 ## Next Steps
 

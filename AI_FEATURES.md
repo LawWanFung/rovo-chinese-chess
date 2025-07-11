@@ -30,6 +30,7 @@ The AI evaluates positions based on:
 3. **Strategic Elements**:
    - Piece coordination
    - Defensive structures
+   - Flying General rule awareness
    - Endgame considerations
 
 ### Difficulty Levels
@@ -110,10 +111,11 @@ src/tests/aiEngine.test.js - AI unit tests
 
 The AI has been tested for:
 - ✅ Valid move generation
-- ✅ Proper rule adherence
+- ✅ Proper rule adherence (including Flying General rule)
 - ✅ Reasonable move selection
 - ✅ Performance across difficulty levels
 - ✅ Error handling and edge cases
+- ✅ Flying General tactical awareness
 
 ## Usage Instructions
 

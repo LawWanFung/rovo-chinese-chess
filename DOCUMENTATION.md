@@ -28,9 +28,10 @@ A complete Chinese Chess (Xiangqi) game implementation built as a Progressive We
 
 ### 🎮 Core Game Features
 
-- **Complete Rule Implementation** - All traditional Xiangqi rules
+- **Complete Rule Implementation** - All traditional Xiangqi rules including Flying General
 - **Turn-based Gameplay** - Red vs Black alternating turns
 - **Move Validation** - Real-time validation for all piece types
+- **Flying General Rule** - Kings can capture each other directly when facing with clear path
 - **Check/Checkmate Detection** - Automatic game state management
 - **Move History** - Complete game record tracking
 
@@ -145,9 +146,18 @@ serve -s build
 - Can move forward or sideways after crossing river
 - Cannot move backward
 
+### Special Rules
+
+#### Flying General (飛將)
+- **Direct King Capture**: Kings facing each other on the same file (column) with no pieces between them can capture each other directly
+- **Piece Pinning**: Any piece positioned between facing kings cannot move away from that file
+- **Strategic Impact**: Creates tactical opportunities and defensive considerations
+- **Rule Enforcement**: Moves that would expose the Flying General rule are automatically prevented
+
 ### Winning Conditions
 
 - **Checkmate** - King cannot escape check
+- **Flying General Capture** - One king captures the other via Flying General rule
 - **King Capture** - Direct capture of opposing king
 - **Stalemate** - No legal moves available (rare)
 

@@ -2,6 +2,27 @@
 
 All notable changes to the Chinese Chess (Xiangqi) project will be documented in this file.
 
+## [1.2.0] - 2024-12-19
+
+### ✨ New Feature: Flying General Rule Implementation
+
+#### 🏛️ Traditional Chinese Chess Rule Added
+- **Flying General (飛將) Rule**: Kings can now capture each other directly when facing on the same file with clear path
+- **Piece Pinning**: Pieces between facing kings cannot move away (authentic Xiangqi behavior)
+- **Strategic Depth**: Adds traditional tactical elements to gameplay
+- **AI Integration**: AI now understands and utilizes Flying General tactics
+
+#### 🎯 Implementation Details
+- **Direct King Capture**: Kings can "fly" across the board to capture opponent king
+- **Move Validation**: Prevents moves that would expose Flying General rule
+- **Path Checking**: Vertical path clearance detection between kings
+- **Rule Enforcement**: Maintains authentic Chinese Chess gameplay
+
+#### 📁 Files Modified
+- `src/utils/gameLogic.js` - Added Flying General rule logic
+- `src/utils/aiEngine.js` - AI now considers Flying General tactics
+- Documentation updated with rule explanations
+
 ## [1.1.0] - 2024-12-19
 
 ### 🔧 Major Bug Fixes & System Improvements

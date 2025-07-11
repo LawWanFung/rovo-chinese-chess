@@ -1,3 +1,41 @@
+# Major Bug Fixes Applied & New Features
+
+## New Feature: Flying General Rule Implementation ✅ ADDED
+
+**Feature**: Traditional Chinese Chess "Flying General" (飛將) rule implementation.
+
+**What Was Added**:
+1. **Direct King Capture**: Kings can now capture each other when facing on the same file with clear path
+2. **Piece Pinning**: Pieces between facing kings cannot move away (authentic Xiangqi behavior)
+3. **Move Validation**: Prevents moves that would expose Flying General rule
+4. **Strategic Depth**: Adds traditional tactical elements missing from basic implementation
+
+**Implementation Details**:
+1. **New Functions Added**:
+   - `isPathClearVertical()` - Checks if vertical path between two points is clear
+   - `wouldExposeToFlyingGeneral()` - Detects if a move would create Flying General situation
+   - Enhanced `validateKingMovement()` - Allows kings to capture each other when facing
+
+2. **Enhanced Move Validation**:
+   - `isValidMove()` now checks for Flying General exposure
+   - `isInCheck()` includes Flying General detection
+   - Proper integration with existing check/checkmate system
+
+3. **Rule Enforcement**:
+   - Pieces between facing kings become "pinned"
+   - Kings can "fly" across board to capture opponent
+   - Maintains all traditional Xiangqi gameplay mechanics
+
+**Files Modified**:
+- `src/utils/gameLogic.js` - Core Flying General rule implementation
+- All documentation files updated with rule explanations
+
+**Testing Verification**:
+- ✅ Kings can capture each other with clear path
+- ✅ Kings cannot capture when path is blocked
+- ✅ Pieces cannot move if it would expose Flying General
+- ✅ AI integration works correctly with new rule
+
 # Major Bug Fixes Applied
 
 ## Problem 1: Piece Color and Capture Issues ✅ FIXED (MAJOR REFACTOR)

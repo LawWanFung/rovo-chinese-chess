@@ -5,7 +5,7 @@
 A complete Chinese Chess (Xiangqi) game built with React.js and Tailwind CSS as a Progressive Web App. Features an intelligent AI opponent, authentic board design, and comprehensive rule enforcement.
 
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![React](https://img.shields.io/badge/react-18.2.0-blue.svg)
 ![PWA](https://img.shields.io/badge/PWA-enabled-purple.svg)
@@ -14,6 +14,7 @@ A complete Chinese Chess (Xiangqi) game built with React.js and Tailwind CSS as 
 
 - ✅ Full Chinese Chess board with traditional pieces
 - ✅ Turn-based gameplay (Red vs Black)
+- ✅ **Flying General (飛將) rule implementation**
 - ✅ **AI Opponent with 3 difficulty levels**
 - ✅ **Minimax algorithm with alpha-beta pruning**
 - ✅ **Intelligent piece evaluation and positioning**
@@ -72,6 +73,9 @@ Chinese Chess (Xiangqi) is played on a 10×9 board with pieces placed on line in
 - **Chariot (車)**: Moves horizontally and vertically
 - **Cannon (炮/砲)**: Moves like chariot, captures by jumping over pieces
 - **Soldier (兵/卒)**: Moves forward, can move sideways after crossing river
+
+### Special Rules:
+- **Flying General (飛將)**: Kings facing each other on the same file with no pieces between them can capture each other directly. Pieces between facing kings cannot move away.
 
 ## Technology Stack
 
